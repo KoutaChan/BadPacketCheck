@@ -1,0 +1,5 @@
+name: BadPacketCheck
+version: '${project.version}'
+main: me.koutachan.badpacketcheck.BadPacketCheck
+api-version: 1.13
+softdepend: [PacketEvents, ViaVersion]
