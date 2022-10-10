@@ -6,12 +6,11 @@ import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckType;
 import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
-import net.kyori.adventure.text.Component;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @CheckType(name = "BadPacket", type = "A")
 public class BadPacketA extends Check {
@@ -21,17 +20,19 @@ public class BadPacketA extends Check {
 
     private final Map<PacketTypeCommon, Long> map = new HashMap<>();
 
-    private final List<PacketTypeCommon> ignoredType = Arrays
-            .asList(PacketType.Play.Client.ANIMATION,
-                    PacketType.Play.Client.USE_ITEM,
-                    PacketType.Play.Client.ENTITY_ACTION,
-                    PacketType.Play.Client.CLICK_WINDOW,
-                    PacketType.Play.Client.PLAYER_DIGGING,
-                    PacketType.Play.Client.INTERACT_ENTITY,
-                    PacketType.Play.Client.HELD_ITEM_CHANGE,
-                    PacketType.Play.Client.PLAYER_BLOCK_PLACEMENT,
-                    PacketType.Play.Client.PONG,
-                    PacketType.Play.Client.KEEP_ALIVE);
+    private final static Set<PacketTypeCommon> ignoredType = new HashSet<PacketTypeCommon>() {{
+        add(PacketType.Play.Client.ANIMATION);
+        add(PacketType.Play.Client.USE_ITEM);
+        add(PacketType.Play.Client.ENTITY_ACTION);
+        add(PacketType.Play.Client.CLICK_WINDOW);
+        add(PacketType.Play.Client.PLAYER_DIGGING);
+        add(PacketType.Play.Client.INTERACT_ENTITY);
+        add(PacketType.Play.Client.HELD_ITEM_CHANGE);
+        add(PacketType.Play.Client.PLAYER_BLOCK_PLACEMENT);
+        add(PacketType.Play.Client.PONG);
+        add(PacketType.Play.Client.KEEP_ALIVE);
+    }};
+
 
     @Override
     public void onPacketReceived(PacketReceived event) {

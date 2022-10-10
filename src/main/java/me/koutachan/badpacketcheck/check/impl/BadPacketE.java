@@ -1,14 +1,11 @@
 package me.koutachan.badpacketcheck.check.impl;
 
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
-import com.github.retrooper.packetevents.util.Vector3d;
-import com.github.retrooper.packetevents.util.Vector3i;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerBlockPlacement;
 import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckType;
 import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
-import me.koutachan.badpacketcheck.event.PacketEvent;
 
 /**
  * Wrong BlockPlacement Packet
@@ -19,7 +16,7 @@ public class BadPacketE extends Check {
         super(data);
     }
 
-    @Override
+    @Override //TODO: add PacketLocation
     public void onPacketReceived(PacketReceived event) {
         if (event.is(PacketType.Play.Client.PLAYER_BLOCK_PLACEMENT)) {
             WrapperPlayClientPlayerBlockPlacement placement = new WrapperPlayClientPlayerBlockPlacement(event.getPacket());

@@ -1,12 +1,10 @@
 package me.koutachan.badpacketcheck.check;
 
-import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPong;
 import me.koutachan.badpacketcheck.data.PlayerData;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 public class Check {
 
@@ -20,6 +18,10 @@ public class Check {
     public void onPacketReceived(PacketReceived event) {}
 
     public void onPacketSend(PacketSendEvent event) {}
+
+    public void onPongEvent(WrapperPlayClientPong pong) {}
+
+    public void onInitialEvent() {}
 
     private CheckType getCheckType() {
         return this.getClass().getAnnotation(CheckType.class);

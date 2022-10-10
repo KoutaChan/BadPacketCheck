@@ -31,8 +31,12 @@ public class PacketReceived {
 
     public boolean isPosition() {
         return type == PacketType.Play.Client.PLAYER_POSITION
-                || type == PacketType.Play.Client.PLAYER_POSITION_AND_ROTATION
-                || type == PacketType.Play.Client.PLAYER_ROTATION;
+                || type == PacketType.Play.Client.PLAYER_POSITION_AND_ROTATION;
+    }
+
+    public boolean isRotation() {
+        return type == PacketType.Play.Client.PLAYER_ROTATION
+                || type == PacketType.Play.Client.PLAYER_POSITION_AND_ROTATION;
     }
 
     public PacketTypeCommon getType() {

@@ -1,9 +1,6 @@
 package me.koutachan.badpacketcheck.data.impl;
 
-import com.github.retrooper.packetevents.event.PacketReceiveEvent;
-import com.github.retrooper.packetevents.protocol.player.ClientVersion;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPong;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerKeepAlive;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPing;
 import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
@@ -22,11 +19,13 @@ public class KeepAliveProcessor {
     private final Map<Integer, Consumer<Integer>> hold = new HashMap<>();
     private int id;
 
-    public void ready(Consumer<Integer> consumer) {
+    public int ready(Consumer<Integer> consumer) {
         final int id = this.id++;
 
         data.getUser().sendPacket(new WrapperPlayServerPing(id));
         hold.put(id, consumer);
+
+        return id;
     }
 
     public void onPongEvent(PacketReceived event) {
@@ -37,5 +36,7 @@ public class KeepAliveProcessor {
         if (consumer != null) {
             consumer.accept(pong.getId());
         }
+
+        data.getCheckProcessor().getChecks().forEach(v -> v.onPongEvent(pong));
     }
 }

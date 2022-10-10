@@ -3,15 +3,11 @@ package me.koutachan.badpacketcheck.check.impl;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientClientStatus;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityStatus;
-import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPlayerInfo;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerUpdateHealth;
 import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckType;
 import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
-import org.bukkit.Bukkit;
 
 /**
  * Check Wrong Respawn Packet
@@ -32,9 +28,9 @@ public class BadPacketD extends Check {
             if (status.getAction() == WrapperPlayClientClientStatus.Action.PERFORM_RESPAWN) {
                 if (!dead) {
                     fail();
+                } else {
+                    data.getKeepAliveProcessor().ready(v -> dead = false);
                 }
-
-                dead = false;
             }
         }
     }
