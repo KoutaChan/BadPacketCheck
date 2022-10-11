@@ -3,10 +3,7 @@ package me.koutachan.badpacketcheck.data;
 import com.github.retrooper.packetevents.protocol.player.User;
 import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckProcessor;
-import me.koutachan.badpacketcheck.data.impl.KeepAliveProcessor;
-import me.koutachan.badpacketcheck.data.impl.PositionProcessor;
-import me.koutachan.badpacketcheck.data.impl.RotationProcessor;
-import me.koutachan.badpacketcheck.data.impl.StateProcessor;
+import me.koutachan.badpacketcheck.data.impl.*;
 
 public class PlayerData {
 
@@ -16,6 +13,7 @@ public class PlayerData {
     private final PositionProcessor positionProcessor = new PositionProcessor(this);
     private final RotationProcessor rotationProcessor = new RotationProcessor(this);
     private final StateProcessor stateProcessor = new StateProcessor(this);
+    private final TeleportProcessor teleportProcessor = new TeleportProcessor(this);
 
     public PlayerData(User user) {
         this.user = user;
@@ -45,5 +43,9 @@ public class PlayerData {
 
     public StateProcessor getStateProcessor() {
         return stateProcessor;
+    }
+
+    public TeleportProcessor getTeleportProcessor() {
+        return teleportProcessor;
     }
 }

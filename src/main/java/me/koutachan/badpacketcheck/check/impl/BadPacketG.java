@@ -5,6 +5,7 @@ import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckType;
 import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
+import net.kyori.adventure.text.Component;
 
 @CheckType(name = "BadPacket", type = "G")
 public class BadPacketG extends Check {
@@ -21,17 +22,21 @@ public class BadPacketG extends Check {
         if (event.getType() == PacketType.Play.Client.USE_ITEM) {
             //TODO: Mojang????
             shouldSkip = true;
-        } else if (shouldSkip && event.is(PacketType.Play.Client.PLAYER_POSITION_AND_ROTATION)) {
-            shouldSkip = false;
         } else if (event.isRotation()) {
-            final float yaw = data.getRotationProcessor().getYaw();
-            final float pitch = data.getRotationProcessor().getPitch();
+            if (shouldSkip) {
+                shouldSkip = false;
+            } else if (data.getTeleportProcessor().getLastTeleport() > 2) {
+                final float yaw = data.getRotationProcessor().getYaw();
+                final float pitch = data.getRotationProcessor().getPitch();
 
-            final float lastYaw = data.getRotationProcessor().getLastYaw();
-            final float lastPitch = data.getRotationProcessor().getLastPitch();
+                final float lastYaw = data.getRotationProcessor().getLastYaw();
+                final float lastPitch = data.getRotationProcessor().getLastPitch();
 
-            if (shouldSkip || (yaw == lastYaw && pitch == lastPitch) || Math.abs(pitch) > 90) {
-                fail();
+                if ((yaw == lastYaw && pitch == lastPitch) || Math.abs(pitch) > 90) {
+                    fail();
+
+                    data.getUser().sendMessage(Component.text(data.getTeleportProcessor().getLastTeleport()));
+                }
             }
         }
 

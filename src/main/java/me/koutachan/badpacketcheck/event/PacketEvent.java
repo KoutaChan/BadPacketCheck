@@ -2,6 +2,7 @@ package me.koutachan.badpacketcheck.event;
 
 import com.github.retrooper.packetevents.event.*;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientEntityAction;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPlayerFlying;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerChangeGameState;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerJoinGame;
@@ -29,8 +30,14 @@ public class PacketEvent implements PacketListener {
                 if (flying.hasRotationChanged()) {
                     data.getRotationProcessor().onFlying(flying.getLocation().getYaw(), flying.getLocation().getPitch());
                 }
+
+                data.getTeleportProcessor().handleFlying();
             } else if (event.getPacketType() == PacketType.Play.Client.PONG) {
                 data.getKeepAliveProcessor().onPongEvent(packetReceived);
+            } else if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
+                WrapperPlayClientEntityAction action = new WrapperPlayClientEntityAction(event);
+
+                data.getStateProcessor().handleAction(action);
             }
 
             data.getCheckProcessor().getChecks().forEach(check -> check.onPacketReceived(packetReceived));
@@ -60,6 +67,7 @@ public class PacketEvent implements PacketListener {
                     if (data.getRotationProcessor().isRotationChanged(wrapper.getYaw(), wrapper.getPitch())) {
                         data.getRotationProcessor().onFlying(wrapper.getYaw(), wrapper.getPitch());
                     }
+                    data.getTeleportProcessor().handleTeleport();
                 });
             }
         }

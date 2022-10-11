@@ -26,7 +26,7 @@ public class BadPacketD extends Check {
             WrapperPlayClientClientStatus status = new WrapperPlayClientClientStatus(event.getPacket());
 
             if (status.getAction() == WrapperPlayClientClientStatus.Action.PERFORM_RESPAWN) {
-                if (!dead) {
+                if (!dead && data.getStateProcessor().isEnabledRespawnScreen()) {
                     fail();
                 } else {
                     data.getKeepAliveProcessor().ready(v -> dead = false);
@@ -44,6 +44,8 @@ public class BadPacketD extends Check {
                 dead = true;
             }
         } else if (event.getPacketType() == PacketType.Play.Server.RESPAWN) {
+            //Accepted
+            //force respawn
             data.getKeepAliveProcessor().ready(v -> dead = false);
         }
     }
