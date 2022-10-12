@@ -3,6 +3,7 @@ package me.koutachan.badpacketcheck.check;
 import me.koutachan.badpacketcheck.check.impl.*;
 import me.koutachan.badpacketcheck.check.impl.keepalive.PongA;
 import me.koutachan.badpacketcheck.check.impl.keepalive.PongB;
+import me.koutachan.badpacketcheck.check.impl.keepalive.PongC;
 import me.koutachan.badpacketcheck.data.PlayerData;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class CheckProcessor {
         add(BadPacketI.class);
         add(PongA.class);
         add(PongB.class);
+        add(PongC.class);
     }};
 
     private final PlayerData data;

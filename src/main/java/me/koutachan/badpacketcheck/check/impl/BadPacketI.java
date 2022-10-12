@@ -54,6 +54,7 @@ public class BadPacketI extends Check {
             WrapperPlayServerOpenWindow window = new WrapperPlayServerOpenWindow(event);
 
             data.getKeepAliveProcessor().ready(v -> {
+                //USER SIDE GUI IS OPENED
                containerId = window.getContainerId();
             });
         } else if (event.getPacketType() == PacketType.Play.Server.CLOSE_WINDOW) {

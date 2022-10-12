@@ -1,36 +1,23 @@
 package me.koutachan.badpacketcheck.check.impl.keepalive;
 
-import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.protocol.packettype.PacketType;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPong;
 import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckType;
-import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
 
-@CheckType(name = "Pong", type = "C"
-)
+@CheckType(name = "Pong", type = "C")
 public class PongC extends Check {
     public PongC(PlayerData data) {
         super(data);
     }
 
-    private long balance = 0;
-
     @Override
-    public void onPacketReceived(PacketReceived event) {
-        if (event.is(PacketType.Play.Client.KEEP_ALIVE)) {
-            balance--;
+    public void onPongEvent(WrapperPlayClientPong pong) {
+        final int f = Math.abs(data.getKeepAliveProcessor().getCurrentId() - data.getKeepAliveProcessor().getSize() - pong.getId());
 
-            System.out.println("balance=" + balance);
-        }
-        System.out.println(event.getType());
-        //System.out.println(event.getType());
-    }
-
-    @Override
-    public void onPacketSend(PacketSendEvent event) {
-        if (event.getPacketType() == PacketType.Play.Server.KEEP_ALIVE) {
-            balance++;
+        //wrong transaction/pong timing
+        if (f != 1) {
+            fail();
         }
     }
 }

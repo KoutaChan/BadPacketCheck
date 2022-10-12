@@ -1,7 +1,6 @@
 package me.koutachan.badpacketcheck;
 
 import com.github.retrooper.packetevents.PacketEvents;
-import com.github.retrooper.packetevents.PacketEventsAPI;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import me.koutachan.badpacketcheck.event.PacketEvent;
@@ -20,7 +19,6 @@ public final class BadPacketCheck extends JavaPlugin {
         PacketEvents.getAPI()
                 .getEventManager().registerListener(new PacketEvent(), PacketListenerPriority.LOWEST);
         // Plugin startup logic
-
     }
 
     @Override

@@ -18,8 +18,8 @@ public class BadPacketB extends Check {
         if (event.is(PacketType.Play.Client.PLAYER_ABILITIES)) {
             WrapperPlayClientPlayerAbilities wrapper = new WrapperPlayClientPlayerAbilities(event.getPacket());
 
-            wrapper.isInCreativeMode().ifPresent(c -> data.getKeepAliveProcessor().ready(v -> {
-            }));
+           // wrapper.
+           // wrapper.isInCreativeMode().ifPresent(c -> );
         }
     }
 }

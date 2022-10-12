@@ -44,9 +44,7 @@ public class BadPacketD extends Check {
                 dead = true;
             }
         } else if (event.getPacketType() == PacketType.Play.Server.RESPAWN) {
-            //Accepted
-            //force respawn
-            data.getKeepAliveProcessor().ready(v -> dead = false);
+            dead = true;
         }
     }
 }

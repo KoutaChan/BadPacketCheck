@@ -7,7 +7,6 @@ import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckType;
 import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
-import org.bukkit.Bukkit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,6 @@ public class BadPacketC extends Check {
         put(DiggingAction.FINISHED_DIGGING, 25);
         put(DiggingAction.CANCELLED_DIGGING, 25);
     }};
-
 
     @Override
     public void onPacketReceived(PacketReceived event) {
