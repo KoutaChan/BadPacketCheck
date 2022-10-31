@@ -1,8 +1,13 @@
 package me.koutachan.badpacketcheck.data.impl;
 
+import com.github.retrooper.packetevents.manager.server.ServerVersion;
+import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.packettype.PacketTypeCommon;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPong;
+import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientWindowConfirmation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerPing;
+import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerWindowConfirmation;
+import me.koutachan.badpacketcheck.BadPacketCheck;
 import me.koutachan.badpacketcheck.check.PacketReceived;
 import me.koutachan.badpacketcheck.data.PlayerData;
 
@@ -17,32 +22,45 @@ public class KeepAliveProcessor {
         this.data = data;
     }
 
-    private final Map<Integer, Consumer<Integer>> waiting = new HashMap<>();
-    private int id;
+    private final Map<Short, Consumer<Short>> waiting = new HashMap<>();
+    private short shiftedNumber;
 
-    public int ready(Consumer<Integer> onPong) {
-        final int currentId = this.id++;
+    public void ready(Consumer<Short> onPong) {
+        final short currentId = (short) Math.abs(shiftedNumber++);
 
-        data.getUser().sendPacket(new WrapperPlayServerPing(currentId));
+        if (BadPacketCheck.INSTANCE.getServerVersion().isNewerThanOrEquals(ServerVersion.V_1_17)) {
+            data.getUser().sendPacket(new WrapperPlayServerPing(currentId));
+        } else {
+            data.getUser().sendPacket(new WrapperPlayServerWindowConfirmation(0, currentId, false));
+        }
+
         waiting.put(currentId, onPong);
-
-        return currentId;
     }
 
     public void onPongEvent(PacketReceived event) {
-        WrapperPlayClientPong pong = new WrapperPlayClientPong(event.getPacket());
+        label: {
+            short receivedId;
 
-        Consumer<Integer> onPong = waiting.remove(pong.getId());
+            if (event.is(PacketType.Play.Client.PONG)) {
+                receivedId = (short) new WrapperPlayClientPong(event.getPacket()).getId();
+            } else if (event.is(PacketType.Play.Client.WINDOW_CONFIRMATION)) {
+                receivedId = new WrapperPlayClientWindowConfirmation(event.getPacket()).getActionId();
+            } else {
+                break label;
+            }
 
-        if (onPong != null) {
-            onPong.accept(pong.getId());
+            final Consumer<Short> onPong = waiting.remove(receivedId);
 
-            data.getCheckProcessor().getChecks().forEach(v -> v.onPongEvent(pong));
+            if (onPong != null) {
+                onPong.accept(receivedId);
+
+                data.getCheckProcessor().getChecks().forEach(v -> v.onPongEvent(receivedId));
+            }
         }
     }
 
     public int getCurrentId() {
-        return id;
+        return shiftedNumber;
     }
 
     public int getSize() {

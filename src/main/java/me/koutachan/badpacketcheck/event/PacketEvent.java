@@ -32,13 +32,13 @@ public class PacketEvent implements PacketListener {
                 }
 
                 data.getTeleportProcessor().handleFlying();
-            } else if (event.getPacketType() == PacketType.Play.Client.PONG) {
-                data.getKeepAliveProcessor().onPongEvent(packetReceived);
             } else if (event.getPacketType() == PacketType.Play.Client.ENTITY_ACTION) {
                 WrapperPlayClientEntityAction action = new WrapperPlayClientEntityAction(event);
 
                 data.getStateProcessor().handleAction(action);
             }
+
+            data.getKeepAliveProcessor().onPongEvent(packetReceived);
 
             data.getCheckProcessor().getChecks().forEach(check -> check.onPacketReceived(packetReceived));
         }
@@ -69,6 +69,8 @@ public class PacketEvent implements PacketListener {
                     }
                     data.getTeleportProcessor().handleTeleport();
                 });
+            } else if (event.getPacketType() == PacketType.Play.Server.DISCONNECT) {
+                event.setCancelled(true);
             }
         }
     }

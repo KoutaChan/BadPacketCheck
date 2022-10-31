@@ -23,15 +23,19 @@ public class PongB extends Check {
             final int currentSize = data.getKeepAliveProcessor().getSize();
 
             if (currentSize > 0) {
-                final int v = (currentSize - lastSize) - (data.getKeepAliveProcessor().getCurrentId() - lastId);
+                final int v = data.getKeepAliveProcessor().getCurrentId() - lastId;
 
-                if (v == 0 && v != lastSize) {
+                if (v < lastSize) {
                     fail();
                 }
+
+                data.getUser().sendMessage("v=" + v + " lastSize=" + lastSize);
             }
         }
 
-        this.previousPacket = event.getType();
+        if (!event.is(PacketType.Play.Client.PONG)) {
+            this.previousPacket = event.getType();
+        }
     }
 
     @Override

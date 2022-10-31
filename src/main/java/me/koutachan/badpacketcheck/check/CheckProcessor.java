@@ -4,6 +4,7 @@ import me.koutachan.badpacketcheck.check.impl.*;
 import me.koutachan.badpacketcheck.check.impl.keepalive.PongA;
 import me.koutachan.badpacketcheck.check.impl.keepalive.PongB;
 import me.koutachan.badpacketcheck.check.impl.keepalive.PongC;
+import me.koutachan.badpacketcheck.check.impl.reach.ReachA;
 import me.koutachan.badpacketcheck.data.PlayerData;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class CheckProcessor {
         add(PongA.class);
         add(PongB.class);
         add(PongC.class);
+
+        add(ReachA.class);
     }};
 
     private final PlayerData data;

@@ -1,6 +1,5 @@
 package me.koutachan.badpacketcheck.check.impl.keepalive;
 
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPong;
 import me.koutachan.badpacketcheck.check.Check;
 import me.koutachan.badpacketcheck.check.CheckType;
 import me.koutachan.badpacketcheck.data.PlayerData;
@@ -12,8 +11,8 @@ public class PongC extends Check {
     }
 
     @Override
-    public void onPongEvent(WrapperPlayClientPong pong) {
-        final int f = Math.abs(data.getKeepAliveProcessor().getCurrentId() - data.getKeepAliveProcessor().getSize() - pong.getId());
+    public void onPongEvent(final short id) {
+        final int f = Math.abs(data.getKeepAliveProcessor().getCurrentId() - data.getKeepAliveProcessor().getSize() - id);
 
         //wrong transaction/pong timing
         if (f != 1) {

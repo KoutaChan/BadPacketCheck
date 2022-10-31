@@ -1,7 +1,6 @@
 package me.koutachan.badpacketcheck.check;
 
 import com.github.retrooper.packetevents.event.PacketSendEvent;
-import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientPong;
 import me.koutachan.badpacketcheck.data.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,7 +18,7 @@ public class Check {
 
     public void onPacketSend(PacketSendEvent event) {}
 
-    public void onPongEvent(WrapperPlayClientPong pong) {}
+    public void onPongEvent(final short id) {}
 
     public void onInitialEvent() {}
 
